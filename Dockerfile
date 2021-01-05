@@ -2,7 +2,7 @@
  
 # Lines preceeded by # are regarded as comments and ignored
  
-######
+#
 # The line below states we will base our new image on the Latest Official Ubuntu 
 # Remove py3 for python 2 image
 FROM tensorflow/tensorflow:latest-gpu-py3
