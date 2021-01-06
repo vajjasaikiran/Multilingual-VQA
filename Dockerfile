@@ -1,4 +1,4 @@
-# Each instruction in this file generates a new layer that gets pushed to your local image cache
+## Each instruction in this file generates a new layer that gets pushed to your local image cache
  
 # Lines preceeded by # are regarded as comments and ignored
  
