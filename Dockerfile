@@ -34,7 +34,7 @@ RUN pip3 --no-cache-dir install networkx pathlib pygraphviz
 
 RUN pip3 --no-cache-dir install torch torchvision deepdish numpy more-itertools h5py urllib3 scikit-learn scikit-image opencv-python pillow imutils
 
-RUN pip3 --no-cache-dir install argparse imageio cPickle utils argparse errno PIL future json
+RUN pip3 --no-cache-dir install argparse imageio utils argparse errno PIL future json
 
 RUN apt-get install -y git
 
