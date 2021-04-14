@@ -30,7 +30,7 @@ WORKDIR $CAFFE_ROOT
 
 # Build and install caffe
 RUN pip install --upgrade pip && \
-    cd python && for req in $(cat requirements.txt) pydot; do pip install $req; done && cd .. && \
+    for req in $(cat requirements.txt) pydot; do pip install $req; done && cd .. && \
     make -j"$(nproc)" && \
     make pycaffe
 
