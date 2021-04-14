@@ -1,48 +1,46 @@
-## Each instruction in this file generates a new layer that gets pushed to your local image cache
- 
-# Lines preceeded by # are regarded as comments and ignored
- 
-#
-# The line below states we will base our new image on the Latest Official Ubuntu 
-# Remove py3 for python 2 image
-FROM tensorflow/tensorflow:latest-gpu-py3
-#ENV http_proxy http://172.16.117.121:3128
-#ENV https_proxy http://172.16.117.121:3128
+FROM nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04
+LABEL maintainer caffe-maint@googlegroups.com
 
-# Identify the maintainer of an image
-LABEL version="0.1"
-LABEL description="Pytorch + some other libraries"
-#
-# Update the image to the latest packages
-#RUN apt-get update && apt-get upgrade -y
-RUN apt-get update
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        build-essential \
+        vim-tiny \
+        cmake \
+        git \
+        wget \
+        libatlas-base-dev \
+        libboost-all-dev \
+        libgflags-dev \
+        libgoogle-glog-dev \
+        libhdf5-serial-dev \
+        libleveldb-dev \
+        liblmdb-dev \
+        libopencv-dev \
+        libprotobuf-dev \
+        libsnappy-dev \
+        protobuf-compiler \
+        python-dev \
+        python-numpy \
+        python-pip \
+        python-setuptools \
+        python-scipy && \
+    rm -rf /var/lib/apt/lists/*
 
-#
-RUN apt-get install -y wget vim htop fish datamash graphviz libgraphviz-dev
+ENV CAFFE_ROOT=/opt/butd/caffe
+WORKDIR $CAFFE_ROOT
 
-RUN pip3 --no-cache-dir install ipython pandas
+# Build and install caffe
+RUN pip3 install --upgrade pip && \
+    cd python && for req in $(cat requirements.txt) pydot; do pip3 install $req; done && cd .. && \
+    make -j"$(nproc)" && \
+    make pycaffe
 
-RUN pip3 --no-cache-dir install docopt joblib natsort scipy
+# Build fast rcnn lib
+RUN cd /opt/butd/lib && make  
 
-RUN pip3 --no-cache-dir install tqdm keras matplotlib librosa scikit-learn
+# Set ENV
+ENV PYCAFFE_ROOT $CAFFE_ROOT/python
+ENV PYTHONPATH $PYCAFFE_ROOT:$PYTHONPATH
+ENV PATH $CAFFE_ROOT/build/tools:$PYCAFFE_ROOT:$PATH
+RUN echo "$CAFFE_ROOT/build/lib" >> /etc/ld.so.conf.d/caffe.conf && ldconfig
 
-RUN pip3 --no-cache-dir install PyEMD
-
-#RUN pip3 --no-cache-dir install pytorch-pretrained-bert==0.6.1 torch==1.0.1.post2 seqeval==0.0.5 nltk
-
-RUN pip3 --no-cache-dir install networkx pathlib pygraphviz
-
-RUN pip3 --no-cache-dir install torch torchvision deepdish numpy more-itertools h5py urllib3 scikit-learn scikit-image opencv-python pillow imutils
-
-RUN pip3 --no-cache-dir install argparse imageio utils argparse errno PIL future json
-
-RUN apt-get install -y git
-
-# 
-RUN apt-get install -y python3-venv
-
-# Install locales
-RUN apt-get install -y locales locales-all
-ENV LC_ALL en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US.UTF-8
+WORKDIR /workspace
