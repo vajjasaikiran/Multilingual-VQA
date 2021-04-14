@@ -1,6 +1,8 @@
 FROM nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04
 LABEL maintainer caffe-maint@googlegroups.com
 
+COPY requirements.txt requirements.txt
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         vim-tiny \
@@ -28,11 +30,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ENV CAFFE_ROOT=/opt/butd/caffe
 WORKDIR $CAFFE_ROOT
 
-# Build and install caffe
-RUN pip install --upgrade pip && \
-    for req in $(cat requirements.txt) pydot; do pip install $req; done && cd .. && \
-    make -j"$(nproc)" && \
-    make pycaffe
+
+RUN pip -r requirements.txt
+
 
 # Build fast rcnn lib
 RUN cd /opt/butd/lib && make  
