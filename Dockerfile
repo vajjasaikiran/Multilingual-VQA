@@ -27,15 +27,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         python-scipy && \
     rm -rf /var/lib/apt/lists/*
 
-ENV CAFFE_ROOT=/opt/butd/caffe
-WORKDIR $CAFFE_ROOT
 
 
-RUN pip -r requirements.txt
+RUN pip install -r requirements.txt
 
-
-# Build fast rcnn lib
-RUN cd /opt/butd/lib && make  
 
 # Set ENV
 ENV PYCAFFE_ROOT $CAFFE_ROOT/python
