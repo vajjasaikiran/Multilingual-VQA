@@ -29,8 +29,8 @@ ENV CAFFE_ROOT=/opt/butd/caffe
 WORKDIR $CAFFE_ROOT
 
 # Build and install caffe
-RUN pip3 install --upgrade pip && \
-    cd python && for req in $(cat requirements.txt) pydot; do pip3 install $req; done && cd .. && \
+RUN pip install --upgrade pip && \
+    cd python && for req in $(cat requirements.txt) pydot; do pip install $req; done && cd .. && \
     make -j"$(nproc)" && \
     make pycaffe
 
