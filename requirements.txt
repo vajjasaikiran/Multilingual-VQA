@@ -15,7 +15,6 @@ scikit-image
 scipy
 tensorboard
 tensorboardX
-tensorflow==2.0.0-beta1
 tqdm
 urllib3
 boto3
