@@ -28,4 +28,4 @@ RUN conda env create -f environment.yml
 
 # Activate the environment, and make sure it's activated:
 #CMD ["conda", "run", "-n", "v"]
-RUN conda activate vl-bert
+RUN /bin/bash -c "source activate vl-bert"
