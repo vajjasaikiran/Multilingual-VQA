@@ -26,6 +26,7 @@ CMD [ "/bin/bash" ]
 
 # install pytorch 1.1 and cudatoolkit
 RUN conda install pytorch=1.1.0 torchvision=0.3.0 cudatoolkit=9.0 -c pytorch
+RUN conda update wrapt
 COPY requirements.txt requirements.txt
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
